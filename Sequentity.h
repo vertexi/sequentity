@@ -114,7 +114,7 @@ struct Track {
     std::unordered_map<EventType, Channel> channels;
 
     entt::entity payload { entt::null };
-    
+
     // Internal
     bool _notsoloed { false };
 };
@@ -205,8 +205,8 @@ void DataEditor(entt::registry& registry, bool* p_open = nullptr);
  *      |_____________|___|
  *      ^             |
  *      .             |
- *      .              
- *    event            
+ *      .
+ *    event
  *
  *
  */
@@ -259,8 +259,8 @@ Documentation
 ----------------------
 */
 
-#ifdef SEQUENTITY_IMPLEMENTATION
-#undef SEQUENTITY_IMPLEMENTATION
+// #ifdef SEQUENTITY_IMPLEMENTATION
+// #undef SEQUENTITY_IMPLEMENTATION
 
 namespace Sequentity {
 
@@ -369,7 +369,7 @@ static struct EditorTheme_ {
     ImVec4 start_time      { ImColor::HSV(0.33f, 0.0f, 0.25f) };
     ImVec4 current_time    { ImColor::HSV(0.6f, 0.5f, 0.5f) };
     ImVec4 end_time        { ImColor::HSV(0.0f, 0.0f, 0.25f) };
-    
+
     float radius { 0.0f };
     float spacing { 1.0f };
     ImVec2 head_tail_handle_width { 10.0f, 100.0f };
@@ -530,7 +530,7 @@ Event& PushEvent(Channel& channel, Event event) {
 
 
 void EventEditor(entt::registry& registry) {
-    auto& state = registry.ctx_or_set<State>();
+    auto& state = registry.ctx().emplace<State>();
 
     _transition(state.pan[0], state.target_pan[0], CommonTheme.transition_speed, 1.0f);
     _transition(state.pan[1], state.target_pan[1], CommonTheme.transition_speed, 1.0f);
@@ -696,7 +696,7 @@ void EventEditor(entt::registry& registry) {
     };
     /**
      * @brief Vertical grid lines
-     *        
+     *
      *   ______________________________________________________
      *  |    |    |    |    |    |    |    |    |    |    |    |
      *  |    |    |    |    |    |    |    |    |    |    |    |
@@ -963,17 +963,17 @@ void EventEditor(entt::registry& registry) {
                             event.time > state.range[1] ||
                             event.time + event.length < state.range[0]
                             );
-                        
+
                         event.enabled = !event.removed;
                         target_height = EditorTheme.active_clip_raise / 2;
                     }
                     #pragma endregion EventTail
-                    
+
                     #pragma region EventBody
                     ImGui::SetCursorPos(cursor + body_pos - ImGui::GetWindowPos());
                     ImGui::SetItemAllowOverlap();
                     ImGui::InvisibleButton("##event", body_size);
-                
+
                     ImGui::PopID();
                     ImGui::PopID();
 
@@ -1037,7 +1037,7 @@ void EventEditor(entt::registry& registry) {
                         painter->AddRect(
                             cursor + pos        + event.thickness * 0.25f,
                             cursor + pos + size - event.thickness * 0.25f,
-                            ImColor(EditorTheme.selection), EditorTheme.radius, ImDrawCornerFlags_All, event.thickness
+                            ImColor(EditorTheme.selection), EditorTheme.radius, ImDrawFlags_RoundCornersAll, event.thickness
                         );
                     }
                     else {
@@ -1047,7 +1047,7 @@ void EventEditor(entt::registry& registry) {
                             ImColor(EditorTheme.outline), EditorTheme.radius
                         );
                     }
-                    
+
                     if (head_hovered)
                     {
                         painter->AddRectFilled(
@@ -1079,7 +1079,7 @@ void EventEditor(entt::registry& registry) {
                                     std::to_string(event.time).c_str()
                                 );
                             }
-                        
+
                             if (event.length > 30.0f) {
                                 painter->AddText(
                                     ImGui::GetFont(),
@@ -1339,7 +1339,7 @@ void EventEditor(entt::registry& registry) {
          *        v
          */
         ImGui::SetCursorPos({ ListerTheme.width - 110.0f, TimelineTheme.height + titlebarHeight });
-        ImGui::InvisibleButton("##pan[1]", ImVec2{ ListerTheme.width, windowSize.y });
+        ImGui::InvisibleButton("##pan[1]", ImVec2{ 110.0f, windowSize.y });
 
         if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNS);
         const bool panV = ImGui::IsItemActive();
@@ -1395,7 +1395,7 @@ void ThemeEditor(bool* p_open) {
             ImGui::ColorEdit4("start_time##editor", &EditorTheme.start_time.x);
             ImGui::ColorEdit4("current_time##editor", &EditorTheme.current_time.x);
             ImGui::ColorEdit4("end_time##editor", &EditorTheme.end_time.x);
-            
+
             ImGui::DragFloat("radius##editor", &EditorTheme.radius);
             ImGui::DragFloat("spacing##editor", &EditorTheme.spacing);
             ImGui::DragFloat2("head_tail_handle_width##editor", &EditorTheme.head_tail_handle_width.x);
@@ -1416,7 +1416,7 @@ void ThemeEditor(bool* p_open) {
 
 } // namespace Sequentity
 
-#endif /* SEQUENTITY_IMPLEMENTATION */
+// #endif /* SEQUENTITY_IMPLEMENTATION */
 
 
 /*
